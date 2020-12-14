@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
 
-const restrict = require('./middleware/restricted-endpoint.js');
+const restrict = require("./middleware/restricted-endpoint.js");
 
-const authRouter = require('./auth/auth-router.js');
-const jokesRouter = require('./jokes/jokes-router.js');
+const authRouter = require("./auth/auth-router.js");
+const jokesRouter = require("./jokes/jokes-router.js");
+const { reverse } = require("./jokes/jokes-data.js");
 
 const server = express();
 
@@ -13,7 +14,9 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-server.use('/api/auth', authRouter);
-server.use('/api/jokes', restrict, jokesRouter); // only logged-in users should have access!
-
+server.use("/api/auth", authRouter);
+server.use("/api/jokes", restrict, jokesRouter); // only logged-in users should have access!
+server.get("/", (req, res) => {
+  res.json({ api: "is up" });
+});
 module.exports = server;
